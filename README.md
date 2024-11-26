@@ -28,5 +28,11 @@ quasar dev -m electron
 quasar build
 ```
 
+### Run tailwind
+```bash
+pnpm tailwindcss -i ./src/css/tailwind.css -o ./src/css/app.css --watch
+```
+
+
 ### Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

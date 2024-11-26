@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="text-green-600 text-lg">
+      tailwind works
+    </div>
     <p>{{ title }}</p>
     <ul>
       <li v-for="todo in todos" :key="todo.id" @click="increment">
