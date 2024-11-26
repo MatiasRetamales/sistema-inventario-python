@@ -1,43 +1,49 @@
+<script setup lang="ts">
+// import { createProduct } from 'app/modules/product/application/create-product'
+// import { findAllProducts } from 'app/modules/product/application/find-all-products'
+// import { Category } from 'app/modules/product/domain/category'
+// import { ProductRepository } from 'app/modules/product/domain/product-repository'
+// import { Provider } from 'app/modules/product/domain/provider'
+// import { ProductMemoryData } from 'app/modules/product/infrastructure/product-memory-data'
+// import { UUID } from 'app/modules/shared/domain/value_objects/uuid'
+// import { ValidString } from 'app/modules/shared/domain/value_objects/valid-string'
+// import { onMounted } from 'vue'
+// import { v4 as uuidv4 } from 'uuid'
+// onMounted(async () => {
+//   console.log('mounted')
+//   const uuidC1 = UUID.from(uuidv4())
+//   const uuidC2 = UUID.from(uuidv4())
+//   const categories = new Map<string, Category>([
+//     [uuidC1.value, new Category(uuidC1, ValidString.from('cat1'))],
+//     [uuidC2.value, new Category(uuidC2, ValidString.from('cat2'))],
+//   ])
+//   const uuidP1 = UUID.from(uuidv4())
+//   const uuidP2 = UUID.from(uuidv4())
+//   const providers = new Map<string, Provider>([
+//     [uuidP1.value, new Provider(uuidP1, ValidString.from('prov1'))],
+//     [uuidP2.value, new Provider(uuidP2, ValidString.from('prov2'))],
+//   ])
+//   const r : ProductRepository = new ProductMemoryData(categories,providers,[])
+//
+//   const save1 = await createProduct(r,{
+//     name: 'product1',
+//     quantity: 10,
+//     price: 100,
+//     categoryID: uuidC1.value,
+//     providerID: uuidP1.value
+//   })
+//   console.log('save1:',save1)
+//
+//   const products = await findAllProducts(r)
+//   console.log('products:',products)
+// })
+</script>
+
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+  <q-page>
+    <div class="text-green-600 text-lg">
+      tailwind works
+    </div>
   </q-page>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import type { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
-
-const todos = ref<Todo[]>([
-  {
-    id: 1,
-    content: 'ct1'
-  },
-  {
-    id: 2,
-    content: 'ct2'
-  },
-  {
-    id: 3,
-    content: 'ct3'
-  },
-  {
-    id: 4,
-    content: 'ct4'
-  },
-  {
-    id: 5,
-    content: 'ct5'
-  }
-]);
-
-const meta = ref<Meta>({
-  totalCount: 1200
-});
-</script>
