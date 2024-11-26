@@ -26,7 +26,6 @@ export async function createProduct( repo: ProductRepository, props: {
 
   const id = wrapType<UUID, InvalidUUIDException>( () => UUID.from( uuidv4() ) )
 
-  console.log( 'id', id )
   if ( id instanceof BaseException ) {
     errors.push( id )
   }
