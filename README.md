@@ -1,19 +1,27 @@
-# sistema-inventario (sistema-inventario-python)
+# sistema-inventario
 
-A Quasar Project
+## Install node & npm
+- https://nodejs.org/en/download/package-manager
+
+## Install pnpm
+```bash
+npm install -g pnpm
+```
 
 ## Install the dependencies
 ```bash
-yarn
-# or
-npm install
+pnpm i
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+## Start the app in development mode and web mode
 ```bash
 quasar dev
 ```
 
+## Start the app in development mode and electron mode
+```bash
+quasar dev -m electron
+```
 
 ### Build the app for production
 ```bash
