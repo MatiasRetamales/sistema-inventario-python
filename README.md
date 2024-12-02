@@ -29,6 +29,14 @@ pnpm quasar dev -m electron
 pnpm quasar build
 ```
 
+### Run Database
+- Require Docker
+- Fill .env
+```bash
+docker-compose build
+docker-compose up -d
+```
+
 ### Run tailwind
 ```bash
 pnpm tailwindcss -i ./src/css/tailwind.css -o ./src/css/app.css --watch

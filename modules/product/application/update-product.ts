@@ -5,10 +5,14 @@ import {
   BaseException,
   Errors
 } from 'app/modules/shared/domain/exceptions/base-exception'
+import { InvalidBooleanException } from 'app/modules/shared/domain/exceptions/invalid-boolean-exception'
+import { InvalidDateException } from 'app/modules/shared/domain/exceptions/invalid-date-exception'
 import { InvalidIntegerException } from 'app/modules/shared/domain/exceptions/invalid-integer-exception'
 import { InvalidStringException } from 'app/modules/shared/domain/exceptions/invalid-string-exception'
 import { InvalidUUIDException } from 'app/modules/shared/domain/exceptions/invalid-uuid-exception'
 import { UUID } from 'app/modules/shared/domain/value_objects/uuid'
+import { ValidBool } from 'app/modules/shared/domain/value_objects/valid-bool'
+import { ValidDate } from 'app/modules/shared/domain/value_objects/valid-date'
 import { ValidInteger } from 'app/modules/shared/domain/value_objects/valid-integer'
 import { ValidString } from 'app/modules/shared/domain/value_objects/valid-string'
 import {
@@ -16,13 +20,17 @@ import {
   wrapTypeErrors
 } from 'app/modules/shared/utils/wrap-type'
 
-export async function  updateProduct(repo: ProductRepository, oldProduct : ProductResponse, newProduct:{
-  name ?: string,
-  quantity ?: number,
-  price ?: number,
-  categoryID ?: string,
-  providerID ?: string,
-}) : Promise<boolean | Errors>{
+export async function updateProduct( repo: ProductRepository,
+  oldProduct: ProductResponse, newProduct: {
+    name?: string,
+    minQuantity?: number,
+    maxQuantity?: number,
+    price?: number,
+    categoryID?: number,
+    providerID?: number,
+    status?: boolean,
+    expirationDate?: Date
+  } ): Promise<boolean | Errors> {
   const errors: BaseException[] = []
 
   const name = wrapTypeDefault<ValidString, string, InvalidStringException>(
@@ -33,12 +41,20 @@ export async function  updateProduct(repo: ProductRepository, oldProduct : Produ
     errors.push( name )
   }
 
-  const quantity = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
-    oldProduct.quantity, ( value ) => ValidInteger.from( value ),
-    newProduct.quantity )
+  const minQuantity = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
+    oldProduct.minQuantity, ( value ) => ValidInteger.from( value ),
+    newProduct.minQuantity )
 
-  if ( quantity instanceof BaseException ) {
-    errors.push( quantity )
+  if ( minQuantity instanceof BaseException ) {
+    errors.push( minQuantity )
+  }
+
+  const maxQuantity = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
+    oldProduct.maxQuantity, ( value ) => ValidInteger.from( value ),
+    newProduct.maxQuantity )
+
+  if ( maxQuantity instanceof BaseException ) {
+    errors.push( maxQuantity )
   }
 
   const price = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
@@ -49,20 +65,36 @@ export async function  updateProduct(repo: ProductRepository, oldProduct : Produ
     errors.push( price )
   }
 
-  const categoryId = wrapTypeDefault<UUID, string, InvalidUUIDException>(
-    oldProduct.category.id, ( value ) => UUID.from( value ),
+  const categoryId = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
+    oldProduct.category.id, ( value ) => ValidInteger.from( value ),
     newProduct.categoryID )
 
   if ( categoryId instanceof BaseException ) {
     errors.push( categoryId )
   }
 
-  const providerId = wrapTypeDefault<UUID, string, InvalidUUIDException>(
-    oldProduct.provider.id, ( value ) => UUID.from( value ),
+  const providerId = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
+    oldProduct.provider.id, ( value ) => ValidInteger.from( value ),
     newProduct.providerID )
 
   if ( providerId instanceof BaseException ) {
     errors.push( providerId )
+  }
+
+  const status = wrapTypeDefault<ValidBool, boolean, InvalidBooleanException>(
+    oldProduct.status, ( value ) => ValidBool.from( value ),
+    newProduct.status )
+
+  if ( status instanceof BaseException ) {
+    errors.push( status )
+  }
+
+  const expirationDate = wrapTypeDefault<ValidDate, Date, InvalidDateException>(
+    oldProduct.expirationDate, ( value ) => ValidDate.from( value ),
+    newProduct.expirationDate )
+
+  if ( expirationDate instanceof BaseException ) {
+    errors.push( expirationDate )
   }
 
   if ( errors.length > 0 ) {
@@ -70,12 +102,19 @@ export async function  updateProduct(repo: ProductRepository, oldProduct : Produ
   }
 
   const product = new Product(
-    oldProduct.id,
     name as ValidString,
-    quantity as ValidInteger,
+    oldProduct.currentQuantity,
+    minQuantity as ValidInteger,
+    maxQuantity as ValidInteger,
     price as ValidInteger,
-    categoryId as UUID,
-    providerId as UUID
+    categoryId as ValidInteger,
+    providerId as ValidInteger,
+    status as ValidBool,
+    oldProduct.user.id,
+    expirationDate as ValidDate,
+    oldProduct.createdAt,
+    oldProduct.updatedAt,
+    oldProduct.id
   )
 
 

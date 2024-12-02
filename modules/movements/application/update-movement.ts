@@ -1,4 +1,5 @@
 import { Movement } from 'app/modules/movements/domain/movement'
+import { MovementDetail } from 'app/modules/movements/domain/movement-detail'
 import { MovementRepository } from 'app/modules/movements/domain/movement-repository'
 import { MovementResponse } from 'app/modules/movements/domain/movement-response'
 import {
@@ -11,8 +12,6 @@ import {
 } from 'app/modules/shared/domain/exceptions/base-exception'
 import { InvalidDateException } from 'app/modules/shared/domain/exceptions/invalid-date-exception'
 import { InvalidIntegerException } from 'app/modules/shared/domain/exceptions/invalid-integer-exception'
-import { InvalidUUIDException } from 'app/modules/shared/domain/exceptions/invalid-uuid-exception'
-import { UUID } from 'app/modules/shared/domain/value_objects/uuid'
 import {
   RawDate,
   ValidDate
@@ -24,20 +23,24 @@ import {
 } from 'app/modules/shared/utils/wrap-type'
 
 export async function updateMovement( repo: MovementRepository,
-  oldMovement: MovementResponse, newMovement: {
-    productID?: string,
+  oldMovement: MovementResponse,
+  newMovement: {
+    userId?: number,
     date?: Date,
-    quantity?: number,
-    type?: MovementTypeEnum
+    type?: MovementTypeEnum,
+    details: {
+      productId?: number,
+      quantity?: number
+    }
   } ): Promise<boolean | Errors> {
   const errors: BaseException[] = []
 
-  const productId = wrapTypeDefault<UUID, string, InvalidUUIDException>(
-    oldMovement.product.id, ( value ) => UUID.from( value ),
-    newMovement.productID )
+  const userId = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
+    oldMovement.user.id, ( value ) => ValidInteger.from( value ),
+    newMovement.userId )
 
-  if ( productId instanceof BaseException ) {
-    errors.push( productId )
+  if ( userId instanceof BaseException ) {
+    errors.push( userId )
   }
 
   const date = wrapTypeDefault<ValidDate, RawDate, InvalidDateException>(
@@ -48,11 +51,19 @@ export async function updateMovement( repo: MovementRepository,
   }
 
   const quantity = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
-    oldMovement.quantity, ( value ) => ValidInteger.from( value ),
-    newMovement.quantity )
+    oldMovement.details.quantity, ( value ) => ValidInteger.from( value ),
+    newMovement.details.quantity )
 
   if ( quantity instanceof BaseException ) {
     errors.push( quantity )
+  }
+
+  const productId = wrapTypeDefault<ValidInteger, number, InvalidIntegerException>(
+    oldMovement.details.product.id, ( value ) => ValidInteger.from( value ),
+    newMovement.details.productId )
+
+  if ( productId instanceof BaseException ) {
+    errors.push( productId )
   }
 
   if ( errors.length > 0 ) {
@@ -64,12 +75,16 @@ export async function updateMovement( repo: MovementRepository,
     : oldMovement.type
 
   const movement = new Movement(
-    oldMovement.id,
-    productId as UUID,
+    type,
     date as ValidDate,
-    quantity as ValidInteger,
-    type
+    userId as ValidInteger
   )
 
-  return await wrapTypeErrors( async () => await repo.update( movement ) )
+  const detail = new MovementDetail(
+    productId as ValidInteger,
+    quantity as ValidInteger
+  )
+
+  return await wrapTypeErrors(
+    async () => await repo.update( movement, detail ) )
 }

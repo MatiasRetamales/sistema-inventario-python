@@ -1,4 +1,13 @@
-<script setup lang="ts">
+<script setup
+  lang="ts">
+import { InvalidStringException } from 'app/modules/shared/domain/exceptions/invalid-string-exception'
+import { InvalidPasswordException } from 'app/modules/shared/domain/exceptions/password-exception'
+import { Password } from 'app/modules/shared/domain/value_objects/password'
+import {
+  wrapType,
+  wrapTypeErrors
+} from 'app/modules/shared/utils/wrap-type'
+
 // import { createProduct } from 'app/modules/product/application/create-product'
 // import { findAllProducts } from 'app/modules/product/application/find-all-products'
 // import { Category } from 'app/modules/product/domain/category'
@@ -37,13 +46,23 @@
 //   const products = await findAllProducts(r)
 //   console.log('products:',products)
 // })
+import { ref } from 'vue'
+const value = ref( '' )
 </script>
 
 <template>
   <q-page>
-    <div class="text-green-600 text-lg">
-      tailwind works
+    <div class="flex flex-col h-full items-center">
+      <span>tailwind works</span>
+      <Button label="Submit"/>
+      <IftaLabel>
+        <InputText id="username" v-model="value" />
+        <label for="username">Username</label>
+      </IftaLabel>
     </div>
   </q-page>
 </template>
+
+<style scoped>
+</style>
 

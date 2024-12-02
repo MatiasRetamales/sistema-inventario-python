@@ -1,14 +1,15 @@
 import { Movement } from 'app/modules/movements/domain/movement'
+import { MovementDetail } from 'app/modules/movements/domain/movement-detail'
 import { MovementRepository } from 'app/modules/movements/domain/movement-repository'
 import { MovementResponse } from 'app/modules/movements/domain/movement-response'
-import { UUID } from 'app/modules/shared/domain/value_objects/uuid'
+import { ValidInteger } from 'app/modules/shared/domain/value_objects/valid-integer'
 
-export class MovementMemoryData implements MovementRepository{
-  async create( movement: Movement ): Promise<boolean> {
+export class MovementMemoryData implements MovementRepository {
+  async create( movement: Movement, detail: MovementDetail ): Promise<boolean> {
     return Promise.resolve( false )
   }
 
-  async delete( id: UUID ): Promise<boolean> {
+  async delete( id: ValidInteger ): Promise<boolean> {
     return Promise.resolve( false )
   }
 
@@ -16,11 +17,11 @@ export class MovementMemoryData implements MovementRepository{
     return Promise.resolve( [] )
   }
 
-  async findById( id: UUID ): Promise<MovementResponse> {
+  async findById( id: ValidInteger ): Promise<MovementResponse> {
     throw new Error( 'Method not implemented.' )
   }
 
-  async update( movement: Movement ): Promise<boolean> {
+  async update( movement: Movement, detail: MovementDetail ): Promise<boolean> {
     return Promise.resolve( false )
   }
 

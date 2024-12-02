@@ -4,32 +4,32 @@ import {
   BaseException,
   Errors
 } from 'app/modules/shared/domain/exceptions/base-exception'
+import { InvalidBooleanException } from 'app/modules/shared/domain/exceptions/invalid-boolean-exception'
+import { InvalidDateException } from 'app/modules/shared/domain/exceptions/invalid-date-exception'
 import { InvalidIntegerException } from 'app/modules/shared/domain/exceptions/invalid-integer-exception'
 import { InvalidUUIDException } from 'app/modules/shared/domain/exceptions/invalid-uuid-exception'
-import { UUID } from 'app/modules/shared/domain/value_objects/uuid'
+import { ValidBool } from 'app/modules/shared/domain/value_objects/valid-bool'
+import { ValidDate } from 'app/modules/shared/domain/value_objects/valid-date'
 import { ValidInteger } from 'app/modules/shared/domain/value_objects/valid-integer'
 import { ValidString } from 'app/modules/shared/domain/value_objects/valid-string'
 import {
   wrapType,
   wrapTypeErrors
 } from 'app/modules/shared/utils/wrap-type'
-import { v4 as uuidv4 } from 'uuid'
 
 export async function createProduct( repo: ProductRepository, props: {
   name: string,
-  quantity: number,
+  categoryID: number,
+  currentQuantity: number,
+  minQuantity: number,
+  maxQuantity: number,
   price: number,
-  categoryID: string,
-  providerID: string,
+  providerID: number,
+  status: boolean,
+  userID: number,
+  expirationDate: Date
 } ): Promise<boolean | Errors> {
   const errors: BaseException[] = []
-
-  const id = wrapType<UUID, InvalidUUIDException>( () => UUID.from( uuidv4() ) )
-
-  console.log( 'id', id )
-  if ( id instanceof BaseException ) {
-    errors.push( id )
-  }
 
   const name = wrapType<ValidString, InvalidUUIDException>(
     () => ValidString.from( props.name ) )
@@ -38,11 +38,25 @@ export async function createProduct( repo: ProductRepository, props: {
     errors.push( name )
   }
 
-  const quantity = wrapType<ValidInteger, InvalidIntegerException>(
-    () => ValidInteger.from( props.quantity ) )
+  const currentQuantity = wrapType<ValidInteger, InvalidIntegerException>(
+    () => ValidInteger.from( props.currentQuantity ) )
 
-  if ( quantity instanceof BaseException ) {
-    errors.push( quantity )
+  if ( currentQuantity instanceof BaseException ) {
+    errors.push( currentQuantity )
+  }
+
+  const minQuantity = wrapType<ValidInteger, InvalidIntegerException>(
+    () => ValidInteger.from( props.minQuantity ) )
+
+  if ( minQuantity instanceof BaseException ) {
+    errors.push( minQuantity )
+  }
+
+  const maxQuantity = wrapType<ValidInteger, InvalidIntegerException>(
+    () => ValidInteger.from( props.maxQuantity ) )
+
+  if ( maxQuantity instanceof BaseException ) {
+    errors.push( maxQuantity )
   }
 
   const price = wrapType<ValidInteger, InvalidIntegerException>(
@@ -52,18 +66,39 @@ export async function createProduct( repo: ProductRepository, props: {
     errors.push( price )
   }
 
-  const categoryID = wrapType<UUID, InvalidUUIDException>(
-    () => UUID.from( props.categoryID ) )
+  const categoryID = wrapType<ValidInteger, InvalidIntegerException>(
+    () => ValidInteger.from( props.categoryID ) )
 
   if ( categoryID instanceof BaseException ) {
     errors.push( categoryID )
   }
 
-  const providerID = wrapType<UUID, InvalidUUIDException>(
-    () => UUID.from( props.providerID ) )
+  const providerID = wrapType<ValidInteger, InvalidIntegerException>(
+    () => ValidInteger.from( props.providerID ) )
 
   if ( providerID instanceof BaseException ) {
     errors.push( providerID )
+  }
+
+  const status = wrapType<ValidBool, InvalidBooleanException>(
+    () => ValidBool.from( props.status ) )
+
+  if ( status instanceof BaseException ) {
+    errors.push( status )
+  }
+
+  const userID = wrapType<ValidInteger, InvalidIntegerException>(
+    () => ValidInteger.from( props.userID ) )
+
+  if ( userID instanceof BaseException ) {
+    errors.push( userID )
+  }
+
+  const expirationDate = wrapType<ValidDate, InvalidDateException>(
+    () => ValidDate.from( props.expirationDate ) )
+
+  if ( expirationDate instanceof BaseException ) {
+    errors.push( expirationDate )
   }
 
   if ( errors.length > 0 ) {
@@ -71,12 +106,16 @@ export async function createProduct( repo: ProductRepository, props: {
   }
 
   const product = new Product(
-    id as UUID,
     name as ValidString,
-    quantity as ValidInteger,
+    categoryID as ValidInteger,
+    currentQuantity as ValidInteger,
+    minQuantity as ValidInteger,
+    maxQuantity as ValidInteger,
     price as ValidInteger,
-    categoryID as UUID,
-    providerID as UUID
+    providerID as ValidInteger,
+    status as ValidBool,
+    userID as ValidInteger,
+    expirationDate as ValidDate
   )
 
   return await wrapTypeErrors( async () => await repo.create( product ) )
