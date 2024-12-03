@@ -45,7 +45,7 @@ export class ProductMemoryData implements ProductRepository {
                   }
                   return {
                     id      : product.id,
-                    name    : product.name,
+                    label   : product.name,
                     quantity: product.quantity,
                     price   : product.price,
                     category: category,
@@ -69,7 +69,7 @@ export class ProductMemoryData implements ProductRepository {
 
     return {
       id      : product.id,
-      name    : product.name,
+      label   : product.name,
       quantity: product.quantity,
       price   : product.price,
       category: category,

@@ -1,31 +1,17 @@
 <script setup lang="ts">
 
-import { ref } from 'vue'
-
 interface IconButtonProps {
-	icon: string
+	icon ?: string
+	label ?: string
 }
 
 defineProps<IconButtonProps>()
-
-// const numero = defineModel<number>({
-//   default: 10,
-// })
-const numero = ref(10)
-
-const emit = defineEmits<{
-  notify: [number]
-}>()
-
-const changeNumber = () => {
-  numero.value += 1
-  emit('notify', numero.value)
-}
 </script>
 
 <template>
-  <button @click="changeNumber">
-    icon-button {{ numero }} {{ icon }}
+  <button class="w-full py-1 flex bg-gray-300 rounded-lg items-center justify-evenly">
+    <q-icon v-if="icon" :name="icon" />
+    <span v-if="label">{{ label }}</span>
   </button>
 </template>
 

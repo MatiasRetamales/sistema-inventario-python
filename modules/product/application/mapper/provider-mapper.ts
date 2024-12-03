@@ -80,7 +80,7 @@ export function providerFromJson( json: Record<string, any> ): ProviderResponse 
 
   return {
     id     : id as ValidInteger,
-    name   : name as ValidString,
+    label  : name as ValidString,
     contact: contact as ValidString,
     phone  : phone as ValidString,
     email  : email as ValidString,

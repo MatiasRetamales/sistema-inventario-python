@@ -39,6 +39,6 @@ export function categoryFromJson( json: Record<string, any> ): CategoryResponse 
 
   return {
     id : id as ValidInteger,
-    name : name as ValidString
+    label: name as ValidString
   }
 }

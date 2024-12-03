@@ -137,7 +137,7 @@ export function productFromJson( json: Record<string, any> ): ProductResponse | 
 
   return {
     id             : id as ValidInteger,
-    name           : name as ValidString,
+    label          : name as ValidString,
     currentQuantity: currentQuantity as ValidInteger,
     minQuantity    : minQuantity as ValidInteger,
     maxQuantity    : maxQuantity as ValidInteger,

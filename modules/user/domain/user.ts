@@ -9,7 +9,7 @@ export class User{
     readonly surname: ValidString,
     readonly address: ValidString[],
     readonly username: ValidString,
-    readonly status: ValidBool,
+    readonly status?: ValidBool,
     readonly createdAt?: ValidDate,
     readonly updatedAt?: ValidDate,
     readonly id ?: ValidInteger,

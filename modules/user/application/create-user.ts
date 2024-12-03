@@ -2,11 +2,9 @@ import {
   BaseException,
   Errors
 } from 'app/modules/shared/domain/exceptions/base-exception'
-import { InvalidBooleanException } from 'app/modules/shared/domain/exceptions/invalid-boolean-exception'
 import { InvalidStringException } from 'app/modules/shared/domain/exceptions/invalid-string-exception'
 import { InvalidPasswordException } from 'app/modules/shared/domain/exceptions/password-exception'
 import { Password } from 'app/modules/shared/domain/value_objects/password'
-import { ValidBool } from 'app/modules/shared/domain/value_objects/valid-bool'
 import { ValidString } from 'app/modules/shared/domain/value_objects/valid-string'
 import {
   wrapType,
@@ -21,7 +19,6 @@ export async function createUser( repo: UserRepository, props: {
   surname: string,
   address: string[],
   username: string,
-  status: boolean,
 } ): Promise<boolean | Errors> {
   const errors: BaseException[] = []
 
@@ -60,13 +57,6 @@ export async function createUser( repo: UserRepository, props: {
     errors.push( username )
   }
 
-  const status = wrapType<ValidBool, InvalidBooleanException>(
-    () => ValidBool.from( props.status ) )
-
-  if ( status instanceof BaseException ) {
-    errors.push( status )
-  }
-
   const pw = await wrapTypeErrors<Password, InvalidPasswordException>(
     () => Password.from( props.password ) )
 
@@ -83,7 +73,6 @@ export async function createUser( repo: UserRepository, props: {
     surname as ValidString,
     address,
     username as ValidString,
-    status as ValidBool,
   )
 
   return await wrapTypeErrors( async () => await repo.create(

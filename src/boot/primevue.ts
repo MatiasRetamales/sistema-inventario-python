@@ -17,6 +17,5 @@ export default boot( ( { app } ) => {
   })
   app.component( 'FloatLabel', FloatLabel )
   app.component( 'InputText', InputText )
-  app.component( 'Button', Button )
   app.component( 'IftaLabel', IftaLabel )
 } )

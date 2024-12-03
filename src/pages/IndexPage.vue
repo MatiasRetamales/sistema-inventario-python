@@ -46,7 +46,9 @@ import {
 //   const products = await findAllProducts(r)
 //   console.log('products:',products)
 // })
-import { ref } from 'vue'
+import {
+  ref
+} from 'vue'
 const value = ref( '' )
 </script>
 
