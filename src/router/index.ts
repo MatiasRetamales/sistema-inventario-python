@@ -40,7 +40,7 @@ export default defineRouter( function ( { store } ) {
     if ( to.matched.some( record => record.meta.requiresAuth ) &&
       !userStore.isSignedIn )
     {
-      next( { label: 'login', query: { next: to.fullPath } } )
+      next( { name: 'login', query: { next: to.fullPath } } )
     }
     else {
       next()

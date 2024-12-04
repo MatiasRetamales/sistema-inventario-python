@@ -7,6 +7,7 @@ import {
   wrapType,
   wrapTypeErrors
 } from 'app/modules/shared/utils/wrap-type'
+import TextInput from 'components/TextInput.vue'
 
 // import { createProduct } from 'app/modules/product/application/create-product'
 // import { findAllProducts } from 'app/modules/product/application/find-all-products'
@@ -54,13 +55,9 @@ const value = ref( '' )
 
 <template>
   <q-page>
-    <div class="flex flex-col h-full items-center">
+    <div class="flex flex-col w-full h-full items-center">
       <span>tailwind works</span>
       <Button label="Submit"/>
-      <IftaLabel>
-        <InputText id="username" v-model="value" />
-        <label for="username">Username</label>
-      </IftaLabel>
     </div>
   </q-page>
 </template>

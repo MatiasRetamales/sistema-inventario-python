@@ -103,7 +103,7 @@ export function userFromJson( json: Record<string, any> ): UserResponse | Errors
 
   return {
     id       : id as ValidInteger,
-    label    : name as ValidString,
+    name    : name as ValidString,
     surname  : surname as ValidString,
     address  : address,
     username : username as ValidString,

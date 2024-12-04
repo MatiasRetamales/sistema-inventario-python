@@ -17,7 +17,7 @@ export abstract class UserRepository {
 
   abstract delete( id: ValidInteger ): Promise<boolean>
 
-  abstract findAll(): Promise<UserResponse[]>
+  abstract findAll(from: ValidInteger, to : ValidInteger): Promise<UserResponse[]>
 
   abstract findById( id: ValidInteger ): Promise<UserResponse>
 }

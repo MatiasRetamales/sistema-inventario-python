@@ -24,7 +24,7 @@ export class UserMemoryData implements UserRepository {
     return Promise.resolve( false )
   }
 
-  async findAll(): Promise<UserResponse[]> {
+  async findAll(from: ValidInteger, to : ValidInteger): Promise<UserResponse[]> {
     return Promise.resolve( [] )
   }
 
